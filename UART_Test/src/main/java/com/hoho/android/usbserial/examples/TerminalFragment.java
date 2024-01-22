@@ -295,7 +295,7 @@ public class TerminalFragment extends Fragment implements SerialInputOutputManag
         }
     }
 
-    private void receive(byte[] data) {
+    public void receive(byte[] data) {
         SpannableStringBuilder spn = new SpannableStringBuilder();
         spn.append("receive " + data.length + " bytes\n");
         if(data.length > 0)
