@@ -167,7 +167,13 @@ public class DevicesFragment extends ListFragment {
             args.putInt("port", item.port);
             args.putInt("baud", baudRate);
             args.putBoolean("withIoManager", withIoManager);
-            Fragment fragment = new TerminalFragment();
+            Fragment fragment = null;
+            Log.d("DevicesFragment", "")
+            if (item.device.getVendorId() == 0x2012){
+                fragment = new PacketTestFragment();
+            } else {
+                fragment = new TerminalFragment();
+            }
             fragment.setArguments(args);
             getFragmentManager().beginTransaction().replace(R.id.fragment, fragment, "terminal").addToBackStack(null).commit();
         }
