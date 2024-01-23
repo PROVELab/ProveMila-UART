@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -168,8 +169,8 @@ public class DevicesFragment extends ListFragment {
             args.putInt("baud", baudRate);
             args.putBoolean("withIoManager", withIoManager);
             Fragment fragment = null;
-            Log.d("DevicesFragment", "")
-            if (item.device.getVendorId() == 0x2012){
+            Log.d("DevicesFragment", String.valueOf(item.device.getVendorId()));
+            if (item.device.getVendorId() == 0x1F00){
                 fragment = new PacketTestFragment();
             } else {
                 fragment = new TerminalFragment();
