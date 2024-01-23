@@ -7,4 +7,13 @@
     <color name="colorRecieveText">#00FF00</color>
     <color name="colorSendText">#82CAFF</color>
     <color name="colorStatusText">#FFDB58</color>
+
+<!--    Forest Green-->
+    <color name="ShynnFavoriteColor">#33B864</color>
+<!--    Rose red-->
+    <color name="SpruhaFavoriteColor">#E3242B</color>
+<!--    Navy Blue-->
+    <color name="RohansFavoriteColor">#4CC9F0</color>
+<!--    White-->
+    <color name="delim">#FFFFFF</color>
 </resources>

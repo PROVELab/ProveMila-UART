@@ -1,5 +1,7 @@
 package com.hoho.android.usbserial.examples;
 
+import androidx.annotation.NonNull;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -20,6 +22,11 @@ class SensorTuple<I extends Number, S>{
     public SensorTuple(I bits, S desc){this.bits = bits; this.desc=desc;}
     public I getBits(){return bits;}
     public S getDesc(){return desc;}
+
+    @Override
+    public String toString() {
+        return (String)( (getDesc() == null) ? "No Description" : getDesc());
+    }
 }
 
 /**
@@ -80,7 +87,7 @@ public class uart_parse {
     public static String[] parse_header(byte[] header){
         // Not sure if reversal is needed for the bit stuff,
         // so uncomment when tested properly
-        for (int i = 0; i < header.length; i++){
+        for (int i = 0; i < Sensors_CFG.HEADER_SIZE_BYTES; i++){
             header[i] = reverse_byte(header[i]);
         }
         BitSet b = BitSet.valueOf(header);
@@ -121,9 +128,12 @@ public class uart_parse {
 
 
     static int count = 0;
-    public static boolean verify(byte[] packet, int crc_to_verify){
+    public static boolean verify(byte[] packet){
+        int crc_to_verify = ByteBuffer.wrap(packet, packet.length-Sensors_CFG.CRC_SIZE_BYTES, Sensors_CFG.CRC_SIZE_BYTES).getShort();
+
         short crc = Sensors_CFG.polys[count];
-        for (byte b : packet){
+        for (int j = 0; j < packet.length - 2; j++){
+            byte b = packet[j];
             crc ^= (b) << 8;
             for (int i = 0; i < 8; i++)
                 if ((crc & 0x8000) != 0)
@@ -159,11 +169,15 @@ public class uart_parse {
      * Almost a direct copy of the C++ one in uart_gen.cpp
      * @param the_byte To print the bits of
      */
-    static void print_byte(byte the_byte){
+    static String print_byte(byte the_byte){
+        StringBuilder sb = new StringBuilder();
         for (int i = 7; i >= 0; i--){
             System.out.printf("%d", (the_byte >> i) & 1);
+            sb.append(String.format("%d", (the_byte >> i) & 1));
         }
         System.out.print("|");
+        sb.append("|");
+        return sb.toString();
     }
 
 
@@ -224,9 +238,7 @@ for (int j = 0; j < 5; j++){
             System.out.println(hex.substring((Sensors_CFG.HEADER_SIZE_BYTES + bytes)*2));
             byte[] crc = bytesFromHex(hex.substring((Sensors_CFG.HEADER_SIZE_BYTES + bytes)*2));
             print_byte(crc[0]); print_byte(crc[1]); System.out.println();
-            int crc_int = 0x0;
-            crc_int = ByteBuffer.wrap(crc).getShort();
-            System.out.println("CRC matched: " + verify(fullPacketExcludingCRC, crc_int));
+            System.out.println("CRC matched: " + verify(bytesFromHex(hex)));
 
             // System.out.println("=".repeat(10));
 }

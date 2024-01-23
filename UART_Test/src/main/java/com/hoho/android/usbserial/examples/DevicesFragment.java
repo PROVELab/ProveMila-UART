@@ -146,8 +146,6 @@ public class DevicesFragment extends ListFragment {
         }
         listAdapter.notifyDataSetChanged();
         View header = getView();
-
-
         // Just messing around you know how it is
         Snackbar.make(header, R.string.HELLO, Snackbar.LENGTH_SHORT).show();
     }
@@ -167,8 +165,13 @@ public class DevicesFragment extends ListFragment {
             args.putInt("port", item.port);
             args.putInt("baud", baudRate);
             args.putBoolean("withIoManager", withIoManager);
+
+            View header = getView();
+            // Just messing around you know how it is
+            Snackbar.make(header, "Device ID: " + item.device.getProductId(), Snackbar.LENGTH_SHORT).show();
+
             Fragment fragment;
-            if (item.device.getDeviceId() == 2012){
+            if (item.device.getProductId() == 0x2012){
                 fragment = new PacketTestFragment();
             } else {
                 fragment = new TerminalFragment();

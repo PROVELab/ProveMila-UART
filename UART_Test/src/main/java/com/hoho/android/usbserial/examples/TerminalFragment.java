@@ -54,7 +54,7 @@ public class TerminalFragment extends Fragment implements SerialInputOutputManag
 
     private final BroadcastReceiver broadcastReceiver;
     private final Handler mainLooper;
-    private TextView receiveText;
+    public TextView receiveText;
     private ControlLines controlLines;
 
     private SerialInputOutputManager usbIoManager;
